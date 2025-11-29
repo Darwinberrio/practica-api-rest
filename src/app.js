@@ -1,27 +1,29 @@
 const express = require("express");
-require('gotenv').config()
+const cors = require("cors");
+require('dotenv').config()
 
-const { connection } = require ('./configs/dbconnect')
+const {connection} = require ('./configs/dbconnect.js')
 
+// console.log(process.env.PORT, 'prueba env')
 
-const app = express()
-const por = process.env.PORT
+// Importaciones
+const app = express();
+const port = process.env.PORT || 3000
 
-app.use(express.static(__dirname + "/public"))
-app.set('view engine', 'ejs')
-app.set("views", __dirname + "/views");
+connection()
 
-/* RUTAS */
-
-app.get('/', (req, res) => {
-
-    res.render('inicio.ejs')
-
-})
-
-app.use("/", require("./routes/servicios.route"));
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.get('/dashboard', (req, res) => { res.send('Administrador')});
+app.use(express.urlencoded());
 
 
+/* RUTAS de servicios*/
+app.use("/api/v1", require("./routes/servicios.route"));
+app.use('/api/v1/auth', require('./routes/user.route'))
+
+// listener
 app.listen(port, () => {
     console.log(`Servidor a la escucha del puerto ${port} `);
 });

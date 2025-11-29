@@ -1,5 +1,5 @@
 {
-  "name": "01-primeros-pasos",
+  "name": "practica-api",
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
@@ -12,7 +12,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-validator": "^7.3.1",
+    "mongoose": "^9.0.0"
   }
 }

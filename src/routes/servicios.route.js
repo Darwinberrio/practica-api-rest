@@ -1,28 +1,33 @@
 const express = require("express");
 const router = express.Router();
 
+const {check, validationResult}= require('express-validator');
+
+const {  createService,
+  getAllService,
+  getServiceById,
+  updateServiceById, 
+  deleteServiceById} = require("../controllers/servicios.controlers");
+const { validateImputs } = require("../middlewares/validateImputs");
 
 // GET ALL SERVICES
-router.get('/servicios', async (req, res) => {
-    try {
-        let data;
-        const respuesta = await fetch('https://jsonplaceholder.typicode.com/users')
-        // console.log(respuesta)
+router.get('/', getAllService)
 
-        if (respuesta.ok) {
-            data = await respuesta.json()
-            console.log(data)
-        }
+router.get('/:id', getServiceById)
 
-        res.render('servicios.ejs', {
-            servicios: data
-        })
+router.post('/crearServicio',[
+    check('nombre', 'Debes escribir el nombre ').not().isEmpty().isLength({ min:2, max: 10 }),
+    check('nombre', 'Debes escribir un email correcto ').isEmail(),
+    check('descripcion', 'Debes -escribir la descripcion').not().isEmpty(),
+    check('precio', 'Debes introducir el precio').not().isEmpty()
+    .isInt({ min:1, max: 2000}).withMessage('Debes introducir un precio entre 1 y 2000'),
+    validateImputs
+], createService) 
 
-    } catch (error) {
-        console.log(error)
-    }
 
-})
+router.put('/:id', updateServiceById) 
+
+router.delete('/:id', deleteServiceById)
 
 module.exports = router;
 
